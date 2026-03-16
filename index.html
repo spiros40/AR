@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Ελύτης AR - Άμεση Εμφάνιση</title>
+    <meta charset="utf-8">
+    <title>Οδυσσέας Ελύτης - AR Gallery</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
@@ -9,7 +10,7 @@
   <body style="margin: 0px; overflow: hidden;">
     <a-scene 
       embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false;" 
+      arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;" 
       vr-mode-ui="enabled: false">
       
       <a-assets>
@@ -19,21 +20,35 @@
         <img id="img4" src="assets/4.png">
       </a-assets>
 
-      <a-entity position="0 0 -5"> <a-image src="#img1" position="0 1.5 0" width="2" height="3"
-                  animation="property: position; to: 0 1.8 0; dur: 2000; dir: alternate; loop: true">
+      <a-entity position="0 0 -4"> 
+        
+        <a-image src="#img1" position="0 1.5 0" width="1.5" height="2.2"
+                  animation="property: position; to: 0 1.7 0; dur: 2000; dir: alternate; loop: true">
         </a-image>
 
-        <a-image src="#img2" position="3 1 1" rotation="0 -30 0" width="2" height="2.5"></a-image>
+        <a-image src="#img2" position="2.5 1 0.5" rotation="0 -30 0" width="1.5" height="1.8"></a-image>
 
-        <a-image src="#img3" position="-3 1 1" rotation="0 30 0" width="2" height="3"></a-image>
+        <a-image src="#img3" position="-2.5 1 0.5" rotation="0 30 0" width="1.5" height="2.2"></a-image>
 
-        <a-image src="#img4" position="0 -1 2" rotation="-45 0 0" width="2" height="2"></a-image>
+        <a-image src="#img4" position="0 -0.5 1.5" rotation="-60 0 0" width="1.5" height="1.5"></a-image>
 
-        <a-text value="Το Δωματιο με τις Εικονες" align="center" color="#FFD700" 
-                position="0 3.5 0" width="6"></a-text>
+        <a-text value="Το Δωματιο με τις Εικονες\nΟδυσσεας Ελυτης" 
+                align="center" color="#FFD700" position="0 3 0" width="5">
+        </a-text>
       </a-entity>
 
-      <a-entity camera></a-entity>
+      <a-entity camera look-controls wasd-controls></a-entity>
+      
     </a-scene>
+
+    <script>
+      // Μικρό script για να σιγουρευτούμε ότι η κάμερα ξεκινά σωστά
+      window.addEventListener('click', function () {
+        var scene = document.querySelector('a-scene');
+        if (scene.hasLoaded) {
+          console.log("Η σκηνή του Ελύτη φορτώθηκε!");
+        }
+      });
+    </script>
   </body>
 </html>
