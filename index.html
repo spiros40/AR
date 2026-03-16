@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <title>Οδυσσέας Ελύτης - AR Gallery</title>
+    <title>Οδυσσέας Ελύτης - AR Gallery (Zoomed)</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
@@ -21,15 +21,12 @@
       </a-assets>
 
       <a-entity position="0 0 -4"> 
-        
         <a-image src="#img1" position="0 1.5 0" width="1.5" height="2.2"
-                  animation="property: position; to: 0 1.7 0; dur: 2000; dir: alternate; loop: true">
+                 animation="property: position; to: 0 1.7 0; dur: 2000; dir: alternate; loop: true">
         </a-image>
 
         <a-image src="#img2" position="2.5 1 0.5" rotation="0 -30 0" width="1.5" height="1.8"></a-image>
-
         <a-image src="#img3" position="-2.5 1 0.5" rotation="0 30 0" width="1.5" height="2.2"></a-image>
-
         <a-image src="#img4" position="0 -0.5 1.5" rotation="-60 0 0" width="1.5" height="1.5"></a-image>
 
         <a-text value="Το Δωματιο με τις Εικονες\nΟδυσσεας Ελυτης" 
@@ -37,16 +34,15 @@
         </a-text>
       </a-entity>
 
-      <a-entity camera look-controls wasd-controls></a-entity>
+      <a-entity camera="fov: 40" look-controls wasd-controls></a-entity>
       
     </a-scene>
 
     <script>
-      // Μικρό script για να σιγουρευτούμε ότι η κάμερα ξεκινά σωστά
       window.addEventListener('click', function () {
         var scene = document.querySelector('a-scene');
         if (scene.hasLoaded) {
-          console.log("Η σκηνή του Ελύτη φορτώθηκε!");
+          console.log("Η σκηνή του Ελύτη φορτώθηκε με ζουμ!");
         }
       });
     </script>
