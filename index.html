@@ -3,11 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR - Marker Based Greek Version</title>
+    <title>Elytis AR - QR Trigger</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      /* Το κουμπί αλλαγής */
       #change-btn {
         position: absolute;
         bottom: 20px;
@@ -18,9 +17,8 @@
         border-radius: 50px;
         font-weight: bold;
         z-index: 1000;
-        display: none; /* Κρυφό μέχρι να βρεθεί ο δείκτης */
+        display: none;
       }
-      /* Το πλαίσιο για το κείμενο */
       #text-overlay {
         position: absolute;
         top: 20px;
@@ -31,12 +29,12 @@
         background: rgba(0, 0, 0, 0.6);
         color: white;
         text-align: center;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-family: sans-serif;
         font-size: 18px;
         border-radius: 10px;
         border: 1px solid #FFD700;
         z-index: 1000;
-        display: none; /* Κρυφό μέχρι να βρεθεί ο δείκτης */
+        display: none;
       }
     </style>
   </head>
@@ -46,7 +44,8 @@
     <div id="text-overlay"></div>
     <button id="change-btn">ΕΠΟΜΕΝΟ</button>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; detectionMode: mono_and_matrix; matrixCodeType: 3x3;">
+      
       <a-assets>
         <img id="img1" src="assets/1.png">
         <img id="img2" src="assets/2.png">
@@ -59,7 +58,7 @@
                  src="#img1" 
                  position="0 0.5 0" 
                  rotation="-90 0 0" 
-                 width="1" height="1.5" 
+                 width="1.2" height="1.8" 
                  material="shader: flat; transparent: true;">
         </a-image>
       </a-marker>
@@ -68,7 +67,6 @@
     </a-scene>
 
     <script>
-      // Τα δεδομένα σας
       const data = [
         { src: "#img1", text: "Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός, αφού είναι ο ίδιος ένας άγγελος;" },
         { src: "#img2", text: "Η ΠΡΟΣΦΟΡΑ<br>Μικρή πράσινη θάλασσα δεκατριώ χρονώ..." },
@@ -82,10 +80,8 @@
       const textOverlay = document.getElementById('text-overlay');
       const imageEl = document.getElementById('main-image');
 
-      // Αρχικοποίηση κειμένου
       textOverlay.innerHTML = data[0].text;
 
-      // Εμφάνιση/Απόκρυψη UI όταν βρεθεί/χαθεί ο δείκτης
       marker.addEventListener('markerFound', () => {
         textOverlay.style.display = 'block';
         btn.style.display = 'block';
@@ -96,19 +92,17 @@
         btn.style.display = 'none';
       });
 
-      // Λειτουργία κουμπιού
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
         imageEl.setAttribute('src', data[currentIndex].src);
         textOverlay.innerHTML = data[currentIndex].text;
         
-        // Διορθώσεις διαστάσεων για αποφυγή παραμόρφωσης
         if(currentIndex === 3) { 
-            imageEl.setAttribute('width', '1.2');
-            imageEl.setAttribute('height', '1.2');
-        } else {
-            imageEl.setAttribute('width', '1');
+            imageEl.setAttribute('width', '1.5');
             imageEl.setAttribute('height', '1.5');
+        } else {
+            imageEl.setAttribute('width', '1.2');
+            imageEl.setAttribute('height', '1.8');
         }
       });
     </script>
