@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis Interactive AR</title>
+    <title>Elytis AR - PNG Edition</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
@@ -13,46 +13,50 @@
         left: 50%;
         transform: translateX(-50%);
         padding: 15px 30px;
-        background: rgba(255, 215, 0, 0.9);
+        background: #FFD700;
         border: 2px solid #000;
         border-radius: 50px;
         font-family: sans-serif;
         font-weight: bold;
         font-size: 18px;
-        z-index: 999;
+        z-index: 1000;
+        box-shadow: 0px 4px 10px rgba(0,0,0,0.3);
       }
     </style>
   </head>
 
-  <body style="margin: 0px; overflow: hidden;">
+  <body style="margin: 0px; overflow: hidden; background-color: #000;">
     
     <button id="change-btn">Επόμενη Εικόνα</button>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
+    <a-scene 
+      embedded 
+      arjs="sourceType: webcam; debugUIEnabled: false;" 
+      vr-mode-ui="enabled: false">
       
       <a-assets>
-        <img id="img1" src="assets/1.png">
-        <img id="img2" src="assets/2.png">
-        <img id="img3" src="assets/3.png">
-        <img id="img4" src="assets/4.png">
+        <img id="img1" src="assets/1.png" crossorigin="anonymous">
+        <img id="img2" src="assets/2.png" crossorigin="anonymous">
+        <img id="img3" src="assets/3.png" crossorigin="anonymous">
+        <img id="img4" src="assets/4.png" crossorigin="anonymous">
       </a-assets>
 
-      <a-entity camera look-controls>
+      <a-entity camera="fov: 80" look-controls>
         
         <a-image id="main-image" 
                  src="#img1" 
                  position="0 0 -6" 
                  width="2.5" 
-                 height="3.8"
-                 material="shader: flat; transparent: true">
+                 height="3.5"
+                 material="shader: flat; transparent: true; side: double">
         </a-image>
 
         <a-text id="main-text" 
                 value="Ο Αγγελος της Αστυπαλαιας" 
                 align="center" 
                 color="#FFD700" 
-                position="0 2.5 -6" 
-                width="6">
+                position="0 2.2 -6" 
+                width="5">
         </a-text>
 
       </a-entity>
@@ -74,17 +78,17 @@
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
         
-        // Αλλαγή εικόνας και κειμένου
+        // Ενημέρωση πηγής και κειμένου
         imageEl.setAttribute('src', data[currentIndex].src);
         textEl.setAttribute('value', data[currentIndex].text);
         
-        // Μικρή διόρθωση μεγέθους ανάλογα με την εικόνα αν χρειάζεται
-        if(currentIndex === 3) { // Για την "Ερημιά" που είναι πιο τετράγωνη
+        // Δυναμική προσαρμογή μεγέθους για να μην υπάρχει παραμόρφωση
+        if(currentIndex === 3) { // Η "Ερημιά" είναι συνήθως πιο τετράγωνη
             imageEl.setAttribute('width', '3');
             imageEl.setAttribute('height', '3');
         } else {
             imageEl.setAttribute('width', '2.5');
-            imageEl.setAttribute('height', '3.8');
+            imageEl.setAttribute('height', '3.5');
         }
       });
     </script>
