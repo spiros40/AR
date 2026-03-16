@@ -3,8 +3,9 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR - Final Greek Version</title>
+    <title>Elytis AR - Marker Based Greek Version</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
       /* Το κουμπί αλλαγής */
       #change-btn {
@@ -17,8 +18,9 @@
         border-radius: 50px;
         font-weight: bold;
         z-index: 1000;
+        display: none; /* Κρυφό μέχρι να βρεθεί ο δείκτης */
       }
-      /* Το πλαίσιο για το κείμενο - ΕΔΩ ΘΑ ΦΑΙΝΟΝΤΑΙ ΤΑ ΕΛΛΗΝΙΚΑ ΤΕΛΕΙΑ */
+      /* Το πλαίσιο για το κείμενο */
       #text-overlay {
         position: absolute;
         top: 20px;
@@ -34,22 +36,17 @@
         border-radius: 10px;
         border: 1px solid #FFD700;
         z-index: 1000;
-      }
-      video {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        object-fit: cover;
-        z-index: -1;
+        display: none; /* Κρυφό μέχρι να βρεθεί ο δείκτης */
       }
     </style>
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
     
-    <div id="text-overlay">Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός...</div>
+    <div id="text-overlay"></div>
     <button id="change-btn">ΕΠΟΜΕΝΟ</button>
 
-    <a-scene vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
       <a-assets>
         <img id="img1" src="assets/1.png">
         <img id="img2" src="assets/2.png">
@@ -57,22 +54,21 @@
         <img id="img4" src="assets/4.png">
       </a-assets>
 
-      <a-entity camera="fov: 80">
-        <a-image id="main-image" src="#img1" position="0 0 -6" width="2.8" height="3.8" material="shader: flat; transparent: true;"></a-image>
-      </a-entity>
+      <a-marker preset="hiro" id="elytis-marker">
+        <a-image id="main-image" 
+                 src="#img1" 
+                 position="0 0.5 0" 
+                 rotation="-90 0 0" 
+                 width="1" height="1.5" 
+                 material="shader: flat; transparent: true;">
+        </a-image>
+      </a-marker>
+
+      <a-entity camera></a-entity>
     </a-scene>
 
     <script>
-      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-        .then(stream => {
-          let video = document.createElement('video');
-          video.srcObject = stream;
-          video.setAttribute('playsinline', '');
-          video.play();
-          document.body.appendChild(video);
-        });
-
-      // ΕΔΩ ΓΡΑΦΕΙΣ ΤΑ ΚΕΙΜΕΝΑ ΣΟΥ ΚΑΝΟΝΙΚΑ ΜΕ ΤΟΝΟΥΣ
+      // Τα δεδομένα σας
       const data = [
         { src: "#img1", text: "Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός, αφού είναι ο ίδιος ένας άγγελος;" },
         { src: "#img2", text: "Η ΠΡΟΣΦΟΡΑ<br>Μικρή πράσινη θάλασσα δεκατριώ χρονώ..." },
@@ -81,23 +77,38 @@
       ];
 
       let currentIndex = 0;
+      const marker = document.getElementById('elytis-marker');
       const btn = document.getElementById('change-btn');
-      const imageEl = document.getElementById('main-image');
       const textOverlay = document.getElementById('text-overlay');
+      const imageEl = document.getElementById('main-image');
 
+      // Αρχικοποίηση κειμένου
+      textOverlay.innerHTML = data[0].text;
+
+      // Εμφάνιση/Απόκρυψη UI όταν βρεθεί/χαθεί ο δείκτης
+      marker.addEventListener('markerFound', () => {
+        textOverlay.style.display = 'block';
+        btn.style.display = 'block';
+      });
+
+      marker.addEventListener('markerLost', () => {
+        textOverlay.style.display = 'none';
+        btn.style.display = 'none';
+      });
+
+      // Λειτουργία κουμπιού
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
         imageEl.setAttribute('src', data[currentIndex].src);
-        
-        // Αλλαγή του κειμένου στην οθόνη
         textOverlay.innerHTML = data[currentIndex].text;
         
+        // Διορθώσεις διαστάσεων για αποφυγή παραμόρφωσης
         if(currentIndex === 3) { 
-            imageEl.setAttribute('width', '3.2');
-            imageEl.setAttribute('height', '3.2');
+            imageEl.setAttribute('width', '1.2');
+            imageEl.setAttribute('height', '1.2');
         } else {
-            imageEl.setAttribute('width', '2.8');
-            imageEl.setAttribute('height', '3.8');
+            imageEl.setAttribute('width', '1');
+            imageEl.setAttribute('height', '1.5');
         }
       });
     </script>
