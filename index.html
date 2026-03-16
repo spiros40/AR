@@ -3,36 +3,40 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR - Marker Based</title>
+    <title>Elytis AR - Marker Based Greek</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
     <style>
-      #text-overlay {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 85%;
-        padding: 15px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        text-align: center;
-        font-family: sans-serif;
-        font-size: 17px;
-        border-radius: 12px;
-        border: 1px solid #FFD700;
-        z-index: 1000;
-        display: none; /* Εμφανίζεται μόνο όταν βρεθεί ο δείκτης */
-      }
+      /* Το κουμπί αλλαγής */
       #change-btn {
         position: absolute;
         bottom: 20px;
         right: 20px;
         padding: 15px 25px;
         background: #FFD700;
+        border: 2px solid #000;
         border-radius: 50px;
         font-weight: bold;
         z-index: 1000;
+        display: none; /* Εμφανίζεται μόνο όταν βρεθεί ο δείκτης */
+      }
+      /* Το πλαίσιο για το κείμενο */
+      #text-overlay {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        text-align: center;
+        font-family: sans-serif;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 1px solid #FFD700;
+        z-index: 1000;
+        display: none; /* Εμφανίζεται μόνο όταν βρεθεί ο δείκτης */
       }
     </style>
   </head>
@@ -51,12 +55,12 @@
         <img id="img4" src="assets/4.png">
       </a-assets>
 
-      <a-marker preset="hiro" id="marker">
+      <a-marker preset="hiro" id="elytis-marker">
         <a-image id="main-image" 
                  src="#img1" 
-                 position="0 0.5 0" 
+                 position="0 1 0" 
                  rotation="-90 0 0" 
-                 width="2" height="3" 
+                 width="2.2" height="3.2" 
                  material="shader: flat; transparent: true;">
         </a-image>
       </a-marker>
@@ -66,33 +70,45 @@
 
     <script>
       const data = [
-        { src: "#img1", text: "<b>Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ (1966)</b><br>Σύμβολο αγνότητας και βυζαντινής παράδοσης." },
-        { src: "#img2", text: "<b>Η ΠΡΟΣΦΟΡΑ</b><br>Η ιερότητα της καθημερινότητας και το φως του Αιγαίου." },
-        { src: "#img3", text: "<b>ΤΟ ΜΗΝΥΜΑ</b><br>Έντονα χρώματα που συμβολίζουν την ελπίδα." },
-        { src: "#img4", text: "<b>ΕΡΗΜΙΑ</b><br>Η σιωπή και η υπαρξιακή αναζήτηση στο τοπίο." }
+        { src: "#img1", text: "<b>Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ</b><br>Πουθενά δεν πάει ο καιρός, αφού είναι ο ίδιος ένας άγγελος;" },
+        { src: "#img2", text: "<b>Η ΠΡΟΣΦΟΡΑ</b><br>Μικρή πράσινη θάλασσα δεκατριώ χρονώ..." },
+        { src: "#img3", text: "<b>ΤΟ ΜΗΝΥΜΑ</b><br>Με την ορμή του ονείρου και την ελπίδα του αύριο." },
+        { src: "#img4", text: "<b>ΕΡΗΜΙΑ</b><br>Στην άκρη της γης, εκεί που τελειώνει η μοναξιά." }
       ];
 
       let currentIndex = 0;
-      const marker = document.getElementById('marker');
+      const marker = document.getElementById('elytis-marker');
+      const btn = document.getElementById('change-btn');
       const textOverlay = document.getElementById('text-overlay');
       const imageEl = document.getElementById('main-image');
-      const btn = document.getElementById('change-btn');
 
-      // Έλεγχος αν ο δείκτης είναι ορατός για το κείμενο
+      // Λειτουργία: Εμφάνιση UI μόνο όταν η κάμερα βλέπει τον δείκτη
       marker.addEventListener('markerFound', () => {
         textOverlay.style.display = 'block';
+        btn.style.display = 'block';
         textOverlay.innerHTML = data[currentIndex].text;
       });
 
+      // Λειτουργία: Απόκρυψη UI όταν χάνεται ο δείκτης
       marker.addEventListener('markerLost', () => {
         textOverlay.style.display = 'none';
+        btn.style.display = 'none';
       });
 
-      // Αλλαγή έργου με το κουμπί
+      // Αλλαγή εικόνας και κειμένου
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
         imageEl.setAttribute('src', data[currentIndex].src);
         textOverlay.innerHTML = data[currentIndex].text;
+        
+        // Διόρθωση μεγέθους για να φαίνεται ολόκληρη η 4η εικόνα
+        if(currentIndex === 3) { 
+            imageEl.setAttribute('width', '2.5');
+            imageEl.setAttribute('height', '2.5');
+        } else {
+            imageEl.setAttribute('width', '2.2');
+            imageEl.setAttribute('height', '3.2');
+        }
       });
     </script>
   </body>
