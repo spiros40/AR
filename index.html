@@ -6,7 +6,7 @@
     <title>Elytis AR</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <style>
-      /* Το κουμπί αλλαγής */
+      /* κουμπί αλλαγής */
       #change-btn {
         position: absolute;
         bottom: 20px;
@@ -18,7 +18,7 @@
         font-weight: bold;
         z-index: 1000;
       }
-      /* Το πλαίσιο για το κείμενο - ΕΔΩ ΘΑ ΦΑΙΝΟΝΤΑΙ ΤΑ ΕΛΛΗΝΙΚΑ ΤΕΛΕΙΑ */
+      
       #text-overlay {
         position: absolute;
         top: 20px;
@@ -72,7 +72,7 @@
           document.body.appendChild(video);
         });
 
-      // ΕΔΩ ΓΡΑΦΕΙΣ ΤΑ ΚΕΙΜΕΝΑ ΣΟΥ ΚΑΝΟΝΙΚΑ ΜΕ ΤΟΝΟΥΣ
+      // ΚΕΙΜΕΝΑ
       const data = [
         { src: "#img1", text: "<b>Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ (1966)</b><br>Ο Ελύτης χρησιμοποιεί τον άγγελο ως σύμβολο αγνότητας, ενσωματώνοντας βυζαντινά στοιχεία στο κολάζ." },
         { src: "#img2", text: "<b>Η ΠΡΟΣΦΟΡΑ</b><br>Ανάδειξη της ιερότητας της καθημερινότητας και του ελληνικού φωτός." },
@@ -89,7 +89,7 @@
         currentIndex = (currentIndex + 1) % data.length;
         imageEl.setAttribute('src', data[currentIndex].src);
         
-        // Αλλαγή του κειμένου στην οθόνη
+        // Αλλαγή του κειμένου
         textOverlay.innerHTML = data[currentIndex].text;
         
         if(currentIndex === 3) { 
