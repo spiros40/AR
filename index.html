@@ -3,57 +3,53 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR - Final Version</title>
+    <title>Elytis AR - Final Greek Version</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
-    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
-    
     <style>
-      /* Το κουμπί αλλαγής έργου */
+      /* Το κουμπί αλλαγής */
       #change-btn {
         position: absolute;
-        bottom: 30px;
+        bottom: 20px;
         right: 20px;
         padding: 15px 25px;
         background: #FFD700;
         border: 2px solid #000;
         border-radius: 50px;
-        font-family: sans-serif;
         font-weight: bold;
-        font-size: 16px;
         z-index: 1000;
-        display: none; /* Εμφανίζεται μόνο όταν βρεθεί ο δείκτης */
-        box-shadow: 0px 4px 10px rgba(0,0,0,0.4);
       }
-
-      /* Το πλαίσιο για τα ελληνικά σχόλια */
+      /* Το πλαίσιο για το κείμενο - ΕΔΩ ΘΑ ΦΑΙΝΟΝΤΑΙ ΤΑ ΕΛΛΗΝΙΚΑ ΤΕΛΕΙΑ */
       #text-overlay {
         position: absolute;
         top: 20px;
         left: 50%;
         transform: translateX(-50%);
-        width: 85%;
+        width: 80%;
         padding: 15px;
-        background: rgba(0, 0, 0, 0.75);
+        background: rgba(0, 0, 0, 0.6);
         color: white;
         text-align: center;
-        font-family: 'Segoe UI', Arial, sans-serif;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px;
-        line-height: 1.4;
-        border-radius: 15px;
-        border: 2px solid #FFD700;
+        border-radius: 10px;
+        border: 1px solid #FFD700;
         z-index: 1000;
-        display: none; /* Εμφανίζεται μόνο όταν βρεθεί ο δείκτης */
+      }
+      video {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        object-fit: cover;
+        z-index: -1;
       }
     </style>
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
     
-    <div id="text-overlay"></div>
-    <button id="change-btn">ΕΠΟΜΕΝΟ ΕΡΓΟ</button>
+    <div id="text-overlay">Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός...</div>
+    <button id="change-btn">ΕΠΟΜΕΝΟ</button>
 
-    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false; trackingMethod: best;">
-      
+    <a-scene vr-mode-ui="enabled: false">
       <a-assets>
         <img id="img1" src="assets/1.png">
         <img id="img2" src="assets/2.png">
@@ -61,76 +57,47 @@
         <img id="img4" src="assets/4.png">
       </a-assets>
 
-      <a-marker preset="hiro" id="elytis-marker">
-        <a-image id="main-image" 
-                 src="#img1" 
-                 position="0 1 0" 
-                 rotation="0 0 0" 
-                 width="2.5" height="3.5" 
-                 material="shader: flat; transparent: true; side: double">
-        </a-image>
-      </a-marker>
-
-      <a-entity camera></a-entity>
+      <a-entity camera="fov: 80">
+        <a-image id="main-image" src="#img1" position="0 0 -6" width="2.8" height="3.8" material="shader: flat; transparent: true;"></a-image>
+      </a-entity>
     </a-scene>
 
     <script>
-      // Τα δεδομένα και τα σχόλια για κάθε έργο
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+        .then(stream => {
+          let video = document.createElement('video');
+          video.srcObject = stream;
+          video.setAttribute('playsinline', '');
+          video.play();
+          document.body.appendChild(video);
+        });
+
+      // ΕΔΩ ΓΡΑΦΕΙΣ ΤΑ ΚΕΙΜΕΝΑ ΣΟΥ ΚΑΝΟΝΙΚΑ ΜΕ ΤΟΝΟΥΣ
       const data = [
-        { 
-          src: "#img1", 
-          text: "<b>Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ (1966)</b><br>Ο Ελύτης χρησιμοποιεί τον άγγελο ως σύμβολο αγνότητας, ενσωματώνοντας βυζαντινά στοιχεία στο κολάζ." 
-        },
-        { 
-          src: "#img2", 
-          text: "<b>Η ΠΡΟΣΦΟΡΑ</b><br>Ανάδειξη της ιερότητας της καθημερινότητας και του ελληνικού φωτός." 
-        },
-        { 
-          src: "#img3", 
-          text: "<b>ΤΟ ΜΗΝΥΜΑ</b><br>Έντονα χρώματα που συμβολίζουν την ελπίδα και την ορμή του ονείρου." 
-        },
-        { 
-          src: "#img4", 
-          text: "<b>ΕΡΗΜΙΑ</b><br>Εξερεύνηση της σιωπής και της μοναξιάς του τοπίου μέσα από την υπερρεαλιστική ματιά." 
-        }
+        { src: "#img1", text: "Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός, αφού είναι ο ίδιος ένας άγγελος;" },
+        { src: "#img2", text: "Η ΠΡΟΣΦΟΡΑ<br>Μικρή πράσινη θάλασσα δεκατριώ χρονώ..." },
+        { src: "#img3", text: "ΤΟ ΜΗΝΥΜΑ<br>Με την ορμή του ονείρου και την ελπίδα του αύριο." },
+        { src: "#img4", text: "ΕΡΗΜΙΑ<br>Στην άκρη της γης, εκεί που τελειώνει η μοναξιά." }
       ];
 
       let currentIndex = 0;
-      const marker = document.getElementById('elytis-marker');
       const btn = document.getElementById('change-btn');
-      const textOverlay = document.getElementById('text-overlay');
       const imageEl = document.getElementById('main-image');
+      const textOverlay = document.getElementById('text-overlay');
 
-      // 1. Εμφάνιση περιεχομένου ΜΟΝΟ όταν βρεθεί ο δείκτης
-      marker.addEventListener('markerFound', () => {
-        textOverlay.style.display = 'block';
-        btn.style.display = 'block';
-        textOverlay.innerHTML = data[currentIndex].text;
-      });
-
-      // 2. Απόκρυψη όταν χαθεί ο δείκτης
-      marker.addEventListener('markerLost', () => {
-        textOverlay.style.display = 'none';
-        btn.style.display = 'none';
-      });
-
-      // 3. Λειτουργία κουμπιού αλλαγής
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
-        
-        // Αλλαγή εικόνας
         imageEl.setAttribute('src', data[currentIndex].src);
         
-        // Αλλαγή σχολίου
+        // Αλλαγή του κειμένου στην οθόνη
         textOverlay.innerHTML = data[currentIndex].text;
         
-        // Προσαρμογή μεγέθους για την 4η εικόνα (αν είναι πιο τετράγωνη)
         if(currentIndex === 3) { 
-            imageEl.setAttribute('width', '3');
-            imageEl.setAttribute('height', '3');
+            imageEl.setAttribute('width', '3.2');
+            imageEl.setAttribute('height', '3.2');
         } else {
-            imageEl.setAttribute('width', '2.5');
-            imageEl.setAttribute('height', '3.5');
+            imageEl.setAttribute('width', '2.8');
+            imageEl.setAttribute('height', '3.8');
         }
       });
     </script>
