@@ -2,58 +2,30 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR</title>
+    <title>Elytis AR </title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
   </head>
 
   <body style="margin: 0px; overflow: hidden;">
-    <a-scene 
-      embedded 
-      arjs="sourceType: webcam; debugUIEnabled: false;" 
-      vr-mode-ui="enabled: false">
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;" vr-mode-ui="enabled: false">
       
-      <a-assets timeout="10000">
-        <img id="img1" src="assets/1.jpg" crossorigin="anonymous">
-        <img id="img2" src="assets/2.jpg" crossorigin="anonymous">
-        <img id="img3" src="assets/3.jpg" crossorigin="anonymous">
-        <img id="img4" src="assets/4.png" crossorigin="anonymous">
+      <a-assets>
+        <img id="img1" src="assets/1.jpg">
+        <img id="img2" src="assets/2.jpg">
+        <img id="img3" src="assets/3.jpg">
+        <img id="img4" src="assets/4.png">
       </a-assets>
 
       <a-entity camera look-controls>
+        <a-image src="#img1" position="0 0.2 -3" width="1" height="1.5"></a-image>
+        <a-image src="#img2" position="1.1 0.6 -3" width="0.7" height="0.9"></a-image>
+        <a-image src="#img3" position="-1.1 0.6 -3" width="0.7" height="1"></a-image>
+        <a-image src="#img4" position="0 -0.8 -3" width="0.8" height="0.8"></a-image>
         
-        <a-entity id="images-group">
-            <a-image src="#img1" position="0 0.1 -4" width="1.2" height="1.8"></a-image>
-
-            <a-image src="#img2" position="1.4 0.6 -4" width="0.8" height="1"></a-image>
-
-            <a-image src="#img3" position="-1.4 0.6 -4" width="0.8" height="1.1"></a-image>
-
-            <a-image src="#img4" position="0 -1 -4" width="1" height="1"></a-image>
-
-            <a-text 
-              value="Οδυσσεας Ελυτης\nΤο Δωματιο με τις Εικονες" 
-              align="center" color="#FFD700" position="0 1.4 -4" width="3.5">
-            </a-text>
-        </a-entity>
-
+        <a-text value="Οδυσσεας Ελυτης" align="center" position="0 1.2 -3" color="gold" width="3"></a-text>
       </a-entity>
-    </a-scene>
 
-    <script>
-      // Αυτό το script εξασφαλίζει ότι οι εικόνες θα "φρεσκαριστούν" για να εμφανιστούν
-      window.addEventListener('load', function () {
-        const scene = document.querySelector('a-scene');
-        scene.addEventListener('loaded', function () {
-            console.log("Scene Loaded");
-            // Μικρό hack: αναγκάζουμε τα υλικά να ενημερωθούν
-            const images = document.querySelectorAll('a-image');
-            images.forEach(img => {
-                img.getObject3D('mesh').material.needsUpdate = true;
-            });
-        });
-      });
-    </script>
+    </a-scene>
   </body>
 </html>
