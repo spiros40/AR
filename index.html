@@ -3,25 +3,38 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Elytis AR - Stable Edition</title>
+    <title>Elytis AR - Final Greek Version</title>
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     <style>
-      /* Το κουμπί παραμένει σταθερό */
+      /* Το κουμπί αλλαγής */
       #change-btn {
         position: absolute;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        padding: 15px 30px;
+        bottom: 20px;
+        right: 20px;
+        padding: 15px 25px;
         background: #FFD700;
         border: 2px solid #000;
         border-radius: 50px;
-        font-family: sans-serif;
         font-weight: bold;
-        font-size: 18px;
         z-index: 1000;
       }
-      /* Αναγκάζουμε την κάμερα να φαίνεται στο υπόβαθρο */
+      /* Το πλαίσιο για το κείμενο - ΕΔΩ ΘΑ ΦΑΙΝΟΝΤΑΙ ΤΑ ΕΛΛΗΝΙΚΑ ΤΕΛΕΙΑ */
+      #text-overlay {
+        position: absolute;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        padding: 15px;
+        background: rgba(0, 0, 0, 0.6);
+        color: white;
+        text-align: center;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 18px;
+        border-radius: 10px;
+        border: 1px solid #FFD700;
+        z-index: 1000;
+      }
       video {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -33,10 +46,10 @@
 
   <body style="margin: 0px; overflow: hidden;">
     
-    <button id="change-btn">Επόμενη Εικόνα</button>
+    <div id="text-overlay">Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός...</div>
+    <button id="change-btn">ΕΠΟΜΕΝΟ</button>
 
     <a-scene vr-mode-ui="enabled: false">
-      
       <a-assets>
         <img id="img1" src="assets/1.png">
         <img id="img2" src="assets/2.png">
@@ -45,53 +58,39 @@
       </a-assets>
 
       <a-entity camera="fov: 80">
-        
-        <a-image id="main-image" 
-                 src="#img1" 
-                 position="0 0 -6" 
-                 width="2.8" 
-                 height="3.8"
-                 material="shader: flat; transparent: true;">
-        </a-image>
-
-        <a-text id="main-text" 
-                value="Ο Αγγελος της Αστυπαλαιας" 
-                align="center" 
-                color="#FFD700" 
-                position="0 2.5 -6" 
-                width="6">
-        </a-text>
-
+        <a-image id="main-image" src="#img1" position="0 0 -6" width="2.8" height="3.8" material="shader: flat; transparent: true;"></a-image>
       </a-entity>
     </a-scene>
 
     <script>
-      // Script για να ανοίξει η κάμερα στο υπόβαθρο χειροκίνητα (πιο σταθερό)
       navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
         .then(stream => {
           let video = document.createElement('video');
           video.srcObject = stream;
+          video.setAttribute('playsinline', '');
           video.play();
           document.body.appendChild(video);
-        })
-        .catch(err => console.error("Camera error: ", err));
+        });
 
+      // ΕΔΩ ΓΡΑΦΕΙΣ ΤΑ ΚΕΙΜΕΝΑ ΣΟΥ ΚΑΝΟΝΙΚΑ ΜΕ ΤΟΝΟΥΣ
       const data = [
-        { src: "#img1", text: "testtesttest" },
-        { src: "#img2", text: "Εδώ γράφεις το κείμενο για τον Άγγελο της Προσφορα" },
-        { src: "#img3", text: "Εδώ γράφεις το κείμενο για τον Άγγελο της Το Μηνυμα" },
-        { src: "#img4", text: "Εδώ γράφεις το κείμενο για τον Άγγελο της Ερημια" }
+        { src: "#img1", text: "Ο ΑΓΓΕΛΟΣ ΤΗΣ ΑΣΤΥΠΑΛΑΙΑΣ<br>Πουθενά δεν πάει ο καιρός, αφού είναι ο ίδιος ένας άγγελος;" },
+        { src: "#img2", text: "Η ΠΡΟΣΦΟΡΑ<br>Μικρή πράσινη θάλασσα δεκατριώ χρονώ..." },
+        { src: "#img3", text: "ΤΟ ΜΗΝΥΜΑ<br>Με την ορμή του ονείρου και την ελπίδα του αύριο." },
+        { src: "#img4", text: "ΕΡΗΜΙΑ<br>Στην άκρη της γης, εκεί που τελειώνει η μοναξιά." }
       ];
 
       let currentIndex = 0;
       const btn = document.getElementById('change-btn');
       const imageEl = document.getElementById('main-image');
-      const textEl = document.getElementById('main-text');
+      const textOverlay = document.getElementById('text-overlay');
 
       btn.addEventListener('click', () => {
         currentIndex = (currentIndex + 1) % data.length;
         imageEl.setAttribute('src', data[currentIndex].src);
-        textEl.setAttribute('value', data[currentIndex].text);
+        
+        // Αλλαγή του κειμένου στην οθόνη
+        textOverlay.innerHTML = data[currentIndex].text;
         
         if(currentIndex === 3) { 
             imageEl.setAttribute('width', '3.2');
